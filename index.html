@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delicias Patty — Sabor colombiano para tus antojos de cada día.</title>
+<meta name="description" content="Productos de panadería y comida típica colombiana para el desayuno, las onces o cualquier antojo.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-media tarj-elevadas modo-claro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tu pedido de antojos</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Enviar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Patty">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Patty</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-centrado">
+  <div class="hero-bg efecto-puntos"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">Panadería y comida típica · Bogotá</div>
+      <h1>Delicias<span>Patty</span></h1>
+      <p class="hero-sub">Sabor colombiano para tus antojos de cada día. Encuentra hojaldres, fritos y platos tradicionales para el desayuno y las onces.</p>
+      <a href="#catalogo" class="btn-hero">Elegir mi antojo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">6</div><div class="lbl">Antojos para elegir</div></div><div class="hero-stat"><div class="num">Desde $2.000</div><div class="lbl">Opciones a tu alcance</div></div><div class="hero-stat"><div class="num">Bogotá</div><div class="lbl">Domicilios y recogida</div></div></div>
+    </div>
+    </div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">Para disfrutar cualquier día</div>
+    <h2>Un antojo con <em>sabor a casa</em></h2>
+    <p>Descubre nuestros hojaldres, buñuelos, tamales y más. Opciones desde $2.000. Domicilios en Bogotá con entrega aproximada de 1 día y posibilidad de recoger personalmente.</p>
+    <div class="banner-chips"><span class="chip">Sabor colombiano</span><span class="chip">Efectivo y Nequi</span><span class="chip">Domicilios en Bogotá</span><span class="chip">Recogida personal</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">Hecho para tus antojos</div><div class="sec-title">Nuestra carta</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">Lo nuestro</div><div class="sec-title">El sabor de elegir a Patty</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">🥐</div><h3>Frescos y recién hechos</h3><p>Productos preparados al momento, con buen sabor y calidad.</p></div><div class="bcard"><div class="bcard-icono">🏡</div><h3>Sabor tradicional colombiano</h3><p>Hojaldres, tamales y buñuelos con el sabor de la receta de siempre, como hecho en casa.</p></div><div class="bcard"><div class="bcard-icono">🤎</div><h3>Precios accesibles</h3><p>Encuentra opciones desde $2.000 para darte un gusto sin gastar mucho.</p></div><div class="bcard"><div class="bcard-icono">☕</div><h3>Para cada momento</h3><p>Variedad para el desayuno, las onces o ese antojo del día.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Ideas para tu próxima pausa</div>
+  <div class="sec-title">Antojos para descubrir</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Los favoritos de la comunidad</div>
+  <div class="sec-title">Los antojos más votados</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Tú eliges el sabor</div>
+  <div class="sec-title">¿Cuál antojo prefieres?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Elige tu favorito para ayudarlo a subir en la lista de antojos más votados.</p>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>Delicias Patty</h3><p>Panadería y comida típica colombiana en Bogotá. Desayunos, onces y antojos con sabor tradicional.</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573102398948" target="_blank" rel="noopener">WhatsApp: +57 3102398948</a></li><li><a href="https://instagram.com/delicias_patty_" target="_blank" rel="noopener">Instagram: @delicias_patty_</a></li><li>📍 Bogotá</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Efectivo</li><li>Nequi</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Hojaldres</li><li>Fritos</li><li>Comida tradicional</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Delicias Patty — Todos los derechos reservados</span>
+    <span>Delicias Patty · Sabor colombiano para cada día.</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"Delicias Patty","descripcion":"Productos de panadería y comida típica colombiana para el desayuno, las onces o cualquier antojo.","eslogan":"Sabor colombiano para tus antojos de cada día.","ciudad":"Bogotá","cobertura":"Domicilios únicamente en Bogotá, con tiempo aproximado de entrega de 1 día. También puedes recoger tu pedido personalmente; punto de recogida por confirmar. No se realizan envíos nacionales.","whatsapp":"573102398948","instagram":"delicias_patty_","facebook":"","tiktok":"","horarios":[],"logo":""},"tema":{"nombreEstilo":"Horno de casa","modo":"claro","colores":{"primario":"#6B422A","textoSobrePrimario":"#FFFFFF","fondo":"#FBF5EB","fondoAlterno":"#EFE2CF","tarjeta":"#FFFCF7","texto":"#33251E","textoSuave":"#705B4B","acento":"#A3602D"},"fuentes":{"titulos":"Lora","cuerpo":"Nunito"},"titulosMayusculas":false,"radio":22,"animaciones":"media","fondoEfecto":"puntos","hero":"centrado","tarjetas":"elevadas"},"textos":{"heroEtiqueta":"Panadería y comida típica · Bogotá","heroTitulo":"Delicias","heroTituloResaltado":"Patty","heroSubtitulo":"Sabor colombiano para tus antojos de cada día. Encuentra hojaldres, fritos y platos tradicionales para el desayuno y las onces.","heroBoton":"Elegir mi antojo","heroImagen":"","estadisticas":[{"valor":"{productos}","etiqueta":"Antojos para elegir"},{"valor":"Desde $2.000","etiqueta":"Opciones a tu alcance"},{"valor":"Bogotá","etiqueta":"Domicilios y recogida"}],"bannerEtiqueta":"Para disfrutar cualquier día","bannerTitulo":"Un antojo con","bannerTituloResaltado":"sabor a casa","bannerTexto":"Descubre nuestros hojaldres, buñuelos, tamales y más. Opciones desde $2.000. Domicilios en Bogotá con entrega aproximada de 1 día y posibilidad de recoger personalmente.","chips":["Sabor colombiano","Efectivo y Nequi","Domicilios en Bogotá","Recogida personal"],"catalogoEtiqueta":"Hecho para tus antojos","catalogoTitulo":"Nuestra carta","botonAgregar":"+ Añadir a mi pedido","beneficiosEtiqueta":"Lo nuestro","beneficiosTitulo":"El sabor de elegir a Patty","recomendadosEtiqueta":"Ideas para tu próxima pausa","recomendadosTitulo":"Antojos para descubrir","topEtiqueta":"Los favoritos de la comunidad","topTitulo":"Los antojos más votados","dueloEtiqueta":"Tú eliges el sabor","dueloTitulo":"¿Cuál antojo prefieres?","dueloInfo":"Elige tu favorito para ayudarlo a subir en la lista de antojos más votados.","testimoniosEtiqueta":"Experiencias con sabor","testimoniosTitulo":"Lo que cuentan nuestros clientes","horariosEtiqueta":"Planea tu visita","horariosTitulo":"Horarios de Delicias Patty","footerTexto":"Panadería y comida típica colombiana en Bogotá. Desayunos, onces y antojos con sabor tradicional.","footerFrase":"Delicias Patty · Sabor colombiano para cada día.","carritoTitulo":"Tu pedido de antojos","botonPagar":"Enviar pedido por WhatsApp"},"productos":[{"id":"p1","nombre":"Hojaldre hawaiano","precio":2000,"categoria":"Hojaldres","imagen":"foto:ti5pb8","opciones":null,"destacado":false},{"id":"p2","nombre":"Buñuelos","precio":4000,"categoria":"Fritos","imagen":"foto:fu3txl","opciones":null,"destacado":false},{"id":"p3","nombre":"Tamales","precio":9000,"categoria":"Comida tradicional","imagen":"foto:7ioxuv","opciones":null,"destacado":false},{"id":"p4","nombre":"Chorizo con arepa","precio":6000,"categoria":"Comida tradicional","imagen":"foto:kgdsgu","opciones":null,"destacado":false},{"id":"p5","nombre":"Pastel de yuca","precio":3000,"categoria":"Fritos","imagen":"foto:mw9h7p","opciones":null,"destacado":false},{"id":"p6","nombre":"Hojaldre de carne","precio":2000,"categoria":"Hojaldres","imagen":"foto:leap6c","opciones":null,"destacado":false}],"beneficios":[{"icono":"🥐","titulo":"Frescos y recién hechos","texto":"Productos preparados al momento, con buen sabor y calidad."},{"icono":"🏡","titulo":"Sabor tradicional colombiano","texto":"Hojaldres, tamales y buñuelos con el sabor de la receta de siempre, como hecho en casa."},{"icono":"🤎","titulo":"Precios accesibles","texto":"Encuentra opciones desde $2.000 para darte un gusto sin gastar mucho."},{"icono":"☕","titulo":"Para cada momento","texto":"Variedad para el desayuno, las onces o ese antojo del día."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Efectivo","icono":"💵","tipo":"efectivo"},{"nombre":"Nequi","icono":"💜","tipo":"transferencia"}],"numeroTransferencia":"3212331671","titular":"[POR COMPLETAR]","contraentregaDetalle":"[POR COMPLETAR]: confirmar si el pago en efectivo aplica en domicilios, recogida o ambos."},"backend":{"url":"https://script.google.com/macros/s/AKfycbzA_zgd5n097fHzsABbNGSyYwkUBAzyQYXBnaJBiOGNKMLTwWdW6xzUNh0C2Hd-pJ0/exec"},"asistente":{"activo":true,"nombre":"Patty","saludo":"¡Hola! Soy Patty 🥐 Te ayudo a elegir tu antojo y a consultar productos, entregas y medios de pago de Delicias Patty."},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo"],"personalizado":{"css":"","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"p1":"img/hojaldre-hawaiano-ti5pb8.jpg","p2":"img/bunuelos-fu3txl.jpg","p3":"img/tamales-7ioxuv.jpg","p4":"img/chorizo-con-arepa-kgdsgu.jpg","p5":"img/pastel-de-yuca-mw9h7p.jpg","p6":"img/hojaldre-de-carne-leap6c.jpg"}</script>
+<script src="script.js"></script>
+</body>
+</html>
